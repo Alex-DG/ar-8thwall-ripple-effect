@@ -39,8 +39,8 @@ class _Ripple {
   setNewWave(x, y, index) {
     let mesh = this.meshes[index]
     mesh.visible = true
-    mesh.position.x = x * 400 //* (1000 / 6) // 250
-    mesh.position.y = y * 400 //* (1000 / 6) //250
+    mesh.position.x = x * 400
+    mesh.position.y = y * 400
     mesh.material.opacity = 0.1
     mesh.scale.x = mesh.scale.y = 0.5
   }
@@ -52,11 +52,6 @@ class _Ripple {
       Math.abs(this.touchPosition.x - this.prevTouchPosition.x) * 1 < 0.01
     const isMoveY =
       Math.abs(this.touchPosition.y - this.prevTouchPosition.y) * 1 < 0.01
-
-    // console.log({
-    //   x: Math.abs(this.touchPosition.x - this.prevTouchPosition.x),
-    //   y: Math.abs(this.touchPosition.y - this.prevTouchPosition.y),
-    // })
 
     if (isMoveX && isMoveY) {
       // nothing
@@ -139,7 +134,7 @@ class _Ripple {
 
       this.isReady = true
     } catch (error) {
-      console.log('error-load', { error })
+      console.log('❌', 'error-load-texture', { error })
     }
   }
 

@@ -22,8 +22,7 @@ const setCamera = ({ sizes }) => {
   // height greater than y=0.
   camera_1.position.set(0, 2, 5)
 
-  const furstrumSize = 10
-  let camera_2 = new THREE.OrthographicCamera(
+  const camera_2 = new THREE.OrthographicCamera(
     -window.innerWidth / 2,
     window.innerWidth / 2,
     window.innerHeight / 2,
@@ -31,16 +30,7 @@ const setCamera = ({ sizes }) => {
     1,
     10
   )
-  // camera_2.position.y = 1
   camera_2.position.z = 3
-  // let camera_2 = new THREE.OrthographicCamera(
-  //   (furstrumSize * aspect) / -2,
-  //   (furstrumSize * aspect) / 2,
-  //   (furstrumSize * aspect) / 2,
-  //   (furstrumSize * aspect) / -2,
-  //   -1000,
-  //   1000
-  // )
 
   XR8.XrController.updateCameraProjectionMatrix({
     origin: camera_1.position,
@@ -54,8 +44,6 @@ const setRenderer = ({ canvas, sizes, GLctx }) => {
   const renderer = new THREE.WebGLRenderer({
     canvas,
     context: GLctx,
-    // alpha: true,
-    antialias: true,
   })
 
   // renderer.autoClear = false
