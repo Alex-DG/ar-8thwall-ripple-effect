@@ -118,6 +118,7 @@ class _Ripple {
   ////////////////////////////////////////////////////////////
 
   init() {
+    this.clock = new THREE.Clock()
     this.load()
   }
 
@@ -145,6 +146,7 @@ class _Ripple {
   render() {
     if (!this.isReady) return
 
+    const time = this.clock.getElapsedTime()
     const { renderer, scene2, camera2 } = XR8.Threejs.xrScene()
 
     this.updateMousePosition()
@@ -153,6 +155,8 @@ class _Ripple {
 
     renderer.setRenderTarget(this.baseTexture)
     renderer.render(scene2, camera2)
+
+    this.imageMaterial.uniforms.uTime.value = time
     this.imageMaterial.uniforms.uDisplacement.value = this.baseTexture.texture
 
     this.meshes?.forEach((mesh) => {

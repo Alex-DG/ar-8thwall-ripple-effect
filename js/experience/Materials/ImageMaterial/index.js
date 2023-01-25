@@ -8,10 +8,11 @@ class ImageMaterial extends ShaderMaterial {
     super({
       uniforms: {
         uTime: { value: 0 },
+        uProgress: { value: 0.02 },
+        uScale: { value: 0.5 },
         uTexture: { value: texture },
         uDisplacement: { value: null },
         uOpacity: { value: 1 },
-        uResolution: { value: new Vector4() },
       },
       side: THREE.DoubleSide,
       vertexShader,

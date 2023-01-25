@@ -20,7 +20,7 @@ const setCamera = ({ sizes }) => {
 
   // Set the initial camera position relative to the scene we just laid out. This must be at a
   // height greater than y=0.
-  camera_1.position.set(0, 2, 5)
+  camera_1.position.set(0, 2, 10)
 
   const camera_2 = new THREE.OrthographicCamera(
     -window.innerWidth / 2,
