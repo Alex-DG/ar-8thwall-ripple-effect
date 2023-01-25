@@ -36,40 +36,15 @@ class _Ripple {
 
   ////////////////////////////////////////////////////////////
 
-  setNewWave(x, y, index) {
+  setNewWave(index) {
     let mesh = this.meshes[index]
     mesh.visible = true
+    const { x, y } = this.touchPosition
     mesh.position.x = x * 400
     mesh.position.y = y * 400
     mesh.material.opacity = 0.1
     mesh.scale.x = mesh.scale.y = 0.5
   }
-
-  trackMousePos() {
-    if (!this.touchPosition || !this.prevTouchPosition) return
-
-    const isMoveX =
-      Math.abs(this.touchPosition.x - this.prevTouchPosition.x) * 1 < 0.01
-    const isMoveY =
-      Math.abs(this.touchPosition.y - this.prevTouchPosition.y) * 1 < 0.01
-
-    if (isMoveX && isMoveY) {
-      // nothing
-    } else {
-      this.setNewWave(
-        this.touchPosition.x,
-        this.touchPosition.y,
-        this.currentWave
-      )
-      this.currentWave = (this.currentWave + 1) % this.max
-      console.log(this.currentWave)
-    }
-
-    this.prevTouchPosition.x = this.touchPosition.x
-    this.prevTouchPosition.y = this.touchPosition.y
-  }
-
-  ////////////////////////////////////////////////////////////
 
   setWave(texture) {
     this.mouseEvents()
@@ -121,6 +96,8 @@ class _Ripple {
     scene.add(this.quad)
   }
 
+  ////////////////////////////////////////////////////////////
+
   async load() {
     try {
       const loader = new THREE.TextureLoader()
@@ -138,8 +115,31 @@ class _Ripple {
     }
   }
 
+  ////////////////////////////////////////////////////////////
+
   init() {
     this.load()
+  }
+
+  ////////////////////////////////////////////////////////////
+
+  updateMousePosition() {
+    if (!this.touchPosition || !this.prevTouchPosition) return
+
+    const isMoveX =
+      Math.abs(this.touchPosition.x - this.prevTouchPosition.x) * 1 < 0.01
+    const isMoveY =
+      Math.abs(this.touchPosition.y - this.prevTouchPosition.y) * 1 < 0.01
+
+    if (isMoveX && isMoveY) {
+      // nothing
+    } else {
+      this.setNewWave(this.currentWave)
+      this.currentWave = (this.currentWave + 1) % this.max
+    }
+
+    this.prevTouchPosition.x = this.touchPosition.x
+    this.prevTouchPosition.y = this.touchPosition.y
   }
 
   render() {
@@ -147,7 +147,7 @@ class _Ripple {
 
     const { renderer, scene2, camera2 } = XR8.Threejs.xrScene()
 
-    this.trackMousePos()
+    this.updateMousePosition()
 
     renderer.autoClear = true
 
@@ -157,11 +157,20 @@ class _Ripple {
 
     this.meshes?.forEach((mesh) => {
       if (mesh.visible) {
-        mesh.rotation.z += 0.02
-        mesh.material.opacity *= 0.96
+        // > Config 1
+        // mesh.rotation.z += 0.02
+        // mesh.material.opacity *= 0.96
 
-        mesh.scale.x = 1.025 * mesh.scale.x + 0.15 //+ Math.random()
-        mesh.scale.x = 0.982 * mesh.scale.x + 0.108
+        // mesh.scale.x = 1.025 * mesh.scale.x + 0.15 //+ Math.random()
+        // mesh.scale.x = 0.982 * mesh.scale.x + 0.108
+        // mesh.scale.y = mesh.scale.x
+
+        // > Config 2
+        mesh.rotation.z += 0.02
+        mesh.material.opacity *= 0.97
+
+        mesh.scale.x = 1.01 * mesh.scale.x + 0.1
+        mesh.scale.x = 0.98 * mesh.scale.x + 0.17
         mesh.scale.y = mesh.scale.x
 
         if (mesh.material.opacity < 0.002) mesh.visible = false
