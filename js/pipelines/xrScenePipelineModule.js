@@ -20,7 +20,7 @@ const setCamera = ({ sizes }) => {
 
   // Set the initial camera position relative to the scene we just laid out. This must be at a
   // height greater than y=0.
-  camera_1.position.set(0, 1, 3)
+  camera_1.position.set(0, 2, 5)
 
   const furstrumSize = 10
   let camera_2 = new THREE.OrthographicCamera(
@@ -172,11 +172,13 @@ export const initXRScenePipelineModule = () => {
     },
 
     onRender: () => {
-      const { material, baseTexture } = Ripple
+      Ripple.render()
 
-      if (material && baseTexture) {
-        Ripple.update()
-      }
+      renderer.autoClear = false
+
+      renderer.setRenderTarget(null)
+      renderer.render(scene, camera)
+      renderer.clearDepth()
     },
     xrScene: () => xrScene,
   }

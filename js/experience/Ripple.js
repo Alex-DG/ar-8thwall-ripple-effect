@@ -76,7 +76,7 @@ class _Ripple {
 
   ////////////////////////////////////////////////////////////
 
-  gestureWave() {
+  setWave(texture) {
     this.mouseEvents()
 
     this.touchPosition = new THREE.Vector2()
@@ -94,7 +94,7 @@ class _Ripple {
 
     for (let index = 0; index < this.max; index++) {
       const material = new THREE.MeshBasicMaterial({
-        map: new THREE.TextureLoader().load(brushSrc),
+        map: texture,
         transparent: true,
         blending: THREE.AdditiveBlending,
         depthTest: false,
@@ -111,42 +111,46 @@ class _Ripple {
     }
   }
 
-  init() {
+  setPlane(texture) {
+    const { scene, sizes } = XR8.Threejs.xrScene()
+    this.baseTexture = new THREE.WebGLRenderTarget(sizes.width, sizes.height, {
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.LinearFilter,
+      format: THREE.RGBAFormat,
+    })
+
+    this.imageMaterial = new ImageMaterial(texture)
+    const geometry = new THREE.PlaneGeometry(5, 5, 64, 64)
+    this.quad = new THREE.Mesh(geometry, this.imageMaterial)
+
+    scene.add(this.quad)
+  }
+
+  async load() {
     try {
-      this.time = 0
+      const loader = new THREE.TextureLoader()
+      const [brushTexture, fujiSanTexture] = await Promise.all([
+        loader.loadAsync(brushSrc),
+        loader.loadAsync(fujiSrc),
+      ])
 
-      this.gestureWave()
-
-      const { scene, sizes } = XR8.Threejs.xrScene()
-      this.baseTexture = new THREE.WebGLRenderTarget(
-        sizes.width,
-        sizes.height,
-        {
-          minFilter: THREE.LinearFilter,
-          magFilter: THREE.LinearFilter,
-          format: THREE.RGBAFormat,
-        }
-      )
-
-      const texture = new THREE.TextureLoader().load(fujiSrc)
-      this.material = new ImageMaterial(texture)
-      const geometry = new THREE.PlaneGeometry(5, 5, 64, 64)
-      this.quad = new THREE.Mesh(geometry, this.material)
-
-      scene.add(this.quad)
+      this.setWave(brushTexture)
+      this.setPlane(fujiSanTexture)
 
       this.isReady = true
     } catch (error) {
-      console.log('RIPPLE_ERROR', { error })
+      console.log('error-load', { error })
     }
   }
 
-  update() {
+  init() {
+    this.load()
+  }
+
+  render() {
     if (!this.isReady) return
 
-    this.time += 0.05
-
-    const { renderer, scene, camera, scene2, camera2 } = XR8.Threejs.xrScene()
+    const { renderer, scene2, camera2 } = XR8.Threejs.xrScene()
 
     this.trackMousePos()
 
@@ -154,13 +158,7 @@ class _Ripple {
 
     renderer.setRenderTarget(this.baseTexture)
     renderer.render(scene2, camera2)
-    this.material.uniforms.uDisplacement.value = this.baseTexture.texture
-
-    renderer.autoClear = false
-
-    renderer.setRenderTarget(null)
-    renderer.render(scene, camera)
-    renderer.clearDepth()
+    this.imageMaterial.uniforms.uDisplacement.value = this.baseTexture.texture
 
     this.meshes?.forEach((mesh) => {
       if (mesh.visible) {
