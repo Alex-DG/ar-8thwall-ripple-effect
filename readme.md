@@ -4,6 +4,11 @@
 
 - AR ripple effect on texture on touchmove device's screen
 
+## Demo
+
+https://user-images.githubusercontent.com/4311684/214456122-2e2b56e6-68a5-4a9b-8a32-5ce7ca9960ce.mp4
+
+
 ## Setup
 
 Run the following commands:
@@ -12,11 +17,8 @@ Run the following commands:
 # Install dependencies (only the first time)
 yarn
 
-# Run the local server at localhost:8080
+# Run the local server
 yarn dev
-
-# Run the local server at your public IP address
-yarn dev --host
 
 # Build for production in the dist/ directory
 yarn build
