@@ -6,8 +6,6 @@
 
 ## Demo
 
-https://user-images.githubusercontent.com/4311684/214456122-2e2b56e6-68a5-4a9b-8a32-5ce7ca9960ce.mp4
-
 
 ## Setup
 
