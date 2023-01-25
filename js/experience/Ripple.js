@@ -90,7 +90,7 @@ class _Ripple {
     })
 
     this.imageMaterial = new ImageMaterial(texture)
-    const geometry = new THREE.PlaneGeometry(5, 5, 64, 64)
+    const geometry = new THREE.PlaneGeometry(7, 5, 64, 64)
     this.quad = new THREE.Mesh(geometry, this.imageMaterial)
 
     scene.add(this.quad)

@@ -24,7 +24,7 @@ void main() {
 
  // Ripple
   vec4 displacement = texture2D(uDisplacement, uv1);
-  float theta = displacement.r * 2.0 * PI * uTime * 0.5;
+  float theta = displacement.r * 2.0 * PI * uTime * 0.15;
   vec2 dir = vec2(sin(theta), cos(theta));
   vec2 uv2 = uv1 + dir * displacement.r * 0.5;
 
